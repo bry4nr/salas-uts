@@ -1,0 +1,157 @@
+// Configuración del cliente y proveedor de Base de Datos
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==========================================
+// ENUMS (Tipos de datos estrictos)
+// ==========================================
+
+enum Role {
+  DOCENTE
+  SOPORTE
+  ADMIN
+}
+
+enum EquipmentType {
+  PC
+  VIDEO_BEAM
+}
+
+enum EquipmentStatus {
+  OK
+  REPORTED
+  IN_MAINTENANCE
+}
+
+enum TicketCategory {
+  HARDWARE
+  SOFTWARE
+  PERIFERICO
+  RED
+  OTRO
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum ActionType {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+// ==========================================
+// MODELOS (Tablas)
+// ==========================================
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  password   String   @default("") // Almacenará el hash de bcrypt
+  name       String
+  role       Role     @default(DOCENTE)
+  created_at DateTime @default(now())
+
+  // Relaciones
+  ticketsCreated Ticket[] @relation("CreatedTickets")
+  messages       Message[]
+  equipmentLogs  EquipmentLog[]
+}
+
+model Room {
+  id       String   @id @default(uuid())
+  name     String   @unique // Ej: "Sala 302B"
+  building String   @db.VarChar(1) // Ej: "A" o "B" 
+  location String   // Ej: "Edificio B • Piso 3"
+  rows     Int
+  cols     Int
+
+  // Relaciones
+  equipments Equipment[]
+  tickets    Ticket[]
+}
+
+model Equipment {
+  id     String          @id @default(uuid())
+  roomId String
+  tag    String          // Ej: "A1-2" o "VB-1"
+  type   EquipmentType   @default(PC)
+  status EquipmentStatus @default(OK)
+
+  // Relaciones
+  room    Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  tickets Ticket[]
+
+  // Restricción: Un mismo tag no puede existir dos veces en la misma sala
+  @@unique([roomId, tag])
+}
+
+model Ticket {
+  id          String         @id @default(uuid())
+  roomId      String?
+  equipmentId String?        // Opcional: Puede ser un daño general a la sala
+  creatorId   String
+
+  otherBuilding String?      // Para cuando se elige la opción "Otros"
+  otherRoom     String?      // Para cuando se elige la opción "Otros"
+
+  correoInstitucional String?
+  valoracionApp       String?
+
+  category    TicketCategory
+  title       String         @db.VarChar(255)
+  description String         @db.Text
+  priority    TicketPriority @default(MEDIUM)
+  status      TicketStatus   @default(PENDING)
+
+  created_at  DateTime       @default(now())
+  resolved_at DateTime?      // Se llena automáticamente cuando cambia a RESOLVED
+
+  // Relaciones
+  room      Room?      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  equipment Equipment? @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  creator   User       @relation("CreatedTickets", fields: [creatorId], references: [id], onDelete: Restrict)
+  messages  Message[]
+
+  // Índices para optimizar consultas de estadísticas
+  @@index([created_at])
+  @@index([status])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  ticketId   String
+  senderId   String
+  text       String   @db.Text
+  created_at DateTime @default(now())
+
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender     User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model EquipmentLog {
+  id          String     @id @default(uuid())
+  action      ActionType
+  equipmentId String?
+  userId      String
+  details     String?    @db.Text
+  created_at  DateTime   @default(now())
+
+  user        User       @relation(fields: [userId], references: [id], onDelete: Restrict)
+}

@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --uts-green: #1A6732;
+    --uts-gold: #FDBE33;
+    --uts-dark-bg: #1E1F21;
+    --uts-dark-card: #2A2B2D;
+  }
+
+  body {
+    @apply bg-uts-dark-bg text-gray-100 antialiased selection:bg-uts-green selection:text-white min-h-screen;
+  }
+}
+
+@layer components {
+  .card-uts {
+    @apply bg-uts-dark-card rounded-uts-card shadow-uts-shadow border border-gray-800/50 backdrop-blur-sm;
+  }
+  
+  .btn-primary {
+    @apply bg-uts-green text-white px-4 py-2 rounded-lg font-medium transition-colors hover:bg-green-800 active:scale-95 flex items-center justify-center gap-2;
+  }
+}
+
+@media print {
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+  }
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+}

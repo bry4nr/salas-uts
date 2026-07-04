@@ -1,0 +1,48 @@
+import type { Ticket } from '../types/ticket';
+
+export const mockTickets: Ticket[] = [
+  {
+    id: '#TKT-042',
+    location: 'Sala 302B - PC A2-3',
+    room: 'Sala 302B',
+    device: 'PC A2-3',
+    failureType: 'Daño de hardware',
+    comment: 'El equipo no enciende, no da ninguna señal de vida al presionar el botón de encendido. Se probó en otro enchufe y sigue igual.',
+    status: 'Pendiente',
+    reportedAt: '2024-04-15T09:15:00Z',
+    reportedBy: 'Prof. Carlos Pérez',
+  },
+  {
+    id: '#TKT-041',
+    location: 'Sala 313A - PC B5-2',
+    room: 'Sala 313A',
+    device: 'PC B5-2',
+    failureType: 'Instalación de programa',
+    comment: 'Se necesita instalar AutoCAD 2024 para la clase de Diseño Asistido. El programa no se encuentra en la lista de software disponible.',
+    status: 'En Revisión',
+    reportedAt: '2024-04-15T08:30:00Z',
+    reportedBy: 'Prof. Laura Gómez',
+  },
+  {
+    id: '#TKT-040',
+    location: 'Sala 307B - Video Beam',
+    room: 'Sala 307B',
+    device: 'Video Beam',
+    failureType: 'Otro',
+    comment: 'La imagen del proyector se ve muy opaca y con un tinte amarillento, es difícil distinguir los colores. Ya se intentó limpiar la lente.',
+    status: 'Pendiente',
+    reportedAt: '2024-04-14T14:05:00Z',
+    reportedBy: 'Prof. Javier Soto',
+  },
+  {
+    id: '#TKT-039',
+    location: 'Sala 305A - PC A1-1',
+    room: 'Sala 305A',
+    device: 'PC A1-1',
+    failureType: 'Falta de periférico',
+    comment: 'El mouse del equipo no funciona, parece que el cable está dañado en la base.',
+    status: 'Resuelto',
+    reportedAt: '2024-04-12T11:20:00Z',
+    reportedBy: 'Prof. Mónica Rivas',
+  },
+];

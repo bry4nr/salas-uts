@@ -1,0 +1,56 @@
+{
+  "name": "salas-uts-desktop",
+  "productName": "Salas UTS",
+  "description": "Sistema de Gestión de Incidencias de Salas UTS — aplicación de escritorio",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "author": "UTS",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.uts.salas",
+    "productName": "Salas UTS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "build/icon.png"
+    ],
+    "extraResources": [
+      {
+        "from": "backend-runtime",
+        "to": "backend-runtime"
+      },
+      {
+        "from": "../frontend/dist-desktop",
+        "to": "frontend"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "SalasUTS-Setup-${version}.${ext}"
+    }
+  }
+}

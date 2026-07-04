@@ -1,0 +1,50 @@
+# Dependencias
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Builds / Producción
+dist/
+dist-ssr/
+build/
+backend/dist/
+frontend/dist/
+desktop/build/
+desktop/release/
+
+# Ejecutables
+*.exe
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Sistema / IDE
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Cache / testing
+.eslintcache
+.vite/
+.turbo/
+coverage/
+
+# Prisma
+src/generated/prisma
+backend/prisma/generated/
